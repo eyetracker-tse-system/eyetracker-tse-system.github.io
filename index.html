@@ -1,0 +1,153 @@
+<!DOCTYPE>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+    <meta charset="UTF-8">
+    
+    
+    <div id="videoContainer" style="position: relative;">
+        <canvas1 id="videoCanvas"></canvas1>  
+        <canvas2 id="videoCanvas1" ></canvas2>
+        <canvas3 id="videoLogo" >
+<!--            <img id="logo" src="SRIBD1.png" style="flex-wrap: wrap;justify-content: center;-->
+<!--        position: absolute;height: 80;width: auto;top:2;left:1000">-->
+        <h2 >Listen to the Speaker in Your Gaze</h2>
+        <body >This platform is used to simulate a real-time system for speaker separation with eye tracker. During video playback, when our attention is focused on a specific person (such as when our gaze is directed towards a particular person's face), we can only hear the voice of that specific speaker.</body>
+        <br>
+        <!-- <img id="logo2" src="SRIBD1.png" style="flex-wrap: wrap;justify-content: center;
+        position: absolute;height: 80;width: auto;top:80;left:2"> -->
+
+        </canvas3>
+        
+        <video id="myvideo" stype="" controls muted >
+            <source src="videos/video_mixture.mp4" type="video/mp4" />
+            <audio id="myaudio" controls>
+                <source src="videos/audio_mixture.wav" type="audio/mpeg"/>
+
+            </audio>
+            
+            
+        </video>
+
+    </div>
+
+    
+    
+
+
+<script>
+var myvideo = document.getElementById("myvideo");
+var myaudio = document.getElementById("myaudio");
+var show_time = document.getElementById("current");
+var logo = document.getElementById("logo")
+var pausetime=Math.floor(myvideo.currentTime);
+var currSpeaker = "all";
+var canvas = document.getElementById("videoCanvas")
+var canvas1 = document.getElementById("videoCanvas1")
+myvideo.onplay  = function() { 
+    if (pausetime==6) {
+        pausetime=0;
+    } 
+    myaudio.currentTime = myvideo.currentTime;
+    myaudio.play();  }
+myvideo.onpause = function() {
+    myaudio.pause()
+
+}
+myvideo.addEventListener("timeupdate", function(){
+        var timeDisplay;
+        timeDisplay =myvideo.currentTime
+
+    })
+myvideo.onended = function(){
+    if (currSpeaker == "SpkLeft")
+        myaudio.setAttribute('src', "videos/audio_out_1.wav");
+    else if (currSpeaker =="SpkRight")
+        myaudio.setAttribute('src', "videos/audio_out_0.wav");
+    else
+        myaudio.setAttribute('src', "videos/audio_mixture.wav");
+    myvideo.play()
+}
+myvideo.addEventListener("mousemove", mouseHandler);
+function onTrackedVideoFrame(currentTime, duration){
+    $("#current").text(currentTime);
+    $("#duration").text(duration)
+    }
+function change_music(music)
+{
+    pausetime=myvideo.currentTime;
+    myaudio.pause();
+    myaudio.setAttribute('src', music);
+    myaudio.load();
+    //myvideo.play();
+}
+function mouseHandler(event) {
+    var rect1 = this.getBoundingClientRect();  // absolute position of element
+    var x = event.clientX - rect1.left;        // adjust for x
+    var y = event.clientY - rect1.top;         // adjust for y
+    var isVideoPlaying = !!(myvideo.currentTime > 0 && !myvideo.paused && !myvideo.ended && myvideo.readyState > 2);
+
+    console.log(x+"-"+y)
+    if (isVideoPlaying){
+    if (x>286 && x<521 && y> 168 &&  y <405){
+        console.log("SpkLeft")
+        if (currSpeaker!="SpkLeft" ){
+            change_music("videos/audio_out_1.wav");
+            myaudio.currentTime = myvideo.currentTime;
+            myaudio.play();
+            currSpeaker="SpkLeft";
+            canvas.style.display="flex"
+            canvas1.style.display="none"
+        }
+        
+    }else if (x >734 && x <818 && y>275 && y<600){
+        console.log("SpkRight")
+        if (currSpeaker!="SpkRight"){
+            change_music("videos/audio_out_0.wav");
+            console.log(myvideo.currentTime)
+            myaudio.currentTime = myvideo.currentTime;
+            myaudio.play();
+            currSpeaker="SpkRight"
+            canvas.style.display="none"
+            canvas1.style.display="flex"
+        }
+        
+    }else{
+        if(currSpeaker != "all"){
+            change_music("videos/audio_mixture.wav");
+            myaudio.currentTime = myvideo.currentTime;
+            myaudio.play();
+            currSpeaker="all"
+            canvas.style.display="none"
+            canvas1.style.display="none"
+        }
+        
+    }
+}
+// function drawImge(){
+    
+// var ctx=canvas.getContext('2d');
+//     console.log("lala");
+
+//     canvas.width = myvideo.videoWidth;
+//     canvas.height = myvideo.videoHeight;
+
+
+//     ctx.drawImage(myvideo, 0, 0, canvas.width, canvas.height);
+
+//     var faceArea = 300;
+//     var pX=canvas.width/2 - faceArea/2;
+//     var pY=canvas.height/2 - faceArea/2;
+
+//     ctx.rect(pX,pY,faceArea,faceArea);
+//     ctx.lineWidth = "6";
+//     ctx.strokeStyle = "red";    
+//     ctx.stroke();
+
+
+
+// }
+    
+}
+</script>
+
