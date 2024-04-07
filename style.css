@@ -8,13 +8,13 @@ canvas1 {
     display: none;flex-wrap: wrap;justify-content: center;
         position: absolute;
         border: 4px solid greenyellow;
-        height: 253;width: 235;
-        top: 230px;left: 286;right:521;bottom: 550;
+        height: 250px;width: 235px; 
+        top: 280px;left: 284px;
 }
 canvas2 {
     display: none;flex-wrap: wrap;justify-content: center;
         position: absolute;
-        border: 3px solid greenyellow;
-        height: 185;width: 164;
-        top: 350;left: 734;right:818;bottom: 600;
+        border: 4px solid greenyellow;
+        height: 220px; width: 164px;
+        top: 350px;left: 734px;
 }
